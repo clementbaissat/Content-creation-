@@ -27,6 +27,7 @@ class VideoDetails:
     publish_date: str
     length_seconds: int
     thumbnail_url: str
+    thumbnail_source: str
     transcript_available: bool
     transcript: List[TranscriptSnippet]
 

@@ -26,6 +26,7 @@ def write_output_bundle(channel: ChannelConfig, details: VideoDetails, assets: G
                 "author": details.author,
                 "length_seconds": details.length_seconds,
                 "thumbnail_url": details.thumbnail_url,
+                "thumbnail_source": details.thumbnail_source,
             },
             indent=2,
         )

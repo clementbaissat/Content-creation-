@@ -3,12 +3,13 @@ from __future__ import annotations
 import html
 import re
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from typing import List
 
 import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from .config import ChannelConfig
+from .config import ChannelConfig, THUMBNAIL_OVERRIDE_DIR
 from .models import TranscriptSnippet, VideoDetails, VideoSummary
 
 
@@ -65,6 +66,7 @@ class YouTubeClient:
         author = self._extract_json_string(page, "author")
         publish_date = self._extract_json_string(page, "publishDate")
         length_seconds_raw = self._extract_json_string(page, "lengthSeconds")
+        thumbnail_url, thumbnail_source = self._resolve_thumbnail(summary.video_id, page)
         transcript = self._fetch_transcript(summary.video_id, language)
         return VideoDetails(
             summary=summary,
@@ -72,15 +74,42 @@ class YouTubeClient:
             description=description,
             publish_date=publish_date,
             length_seconds=int(length_seconds_raw or "0"),
-            thumbnail_url=f"https://i.ytimg.com/vi/{summary.video_id}/hqdefault.jpg",
+            thumbnail_url=thumbnail_url,
+            thumbnail_source=thumbnail_source,
             transcript_available=bool(transcript),
             transcript=transcript,
         )
 
     def download_thumbnail(self, url: str, output_path) -> None:
+        source_path = Path(url)
+        if source_path.exists():
+            output_path.write_bytes(source_path.read_bytes())
+            return
+
         response = self.session.get(url, timeout=30)
         response.raise_for_status()
         output_path.write_bytes(response.content)
+
+    def _resolve_thumbnail(self, video_id: str, page: str) -> tuple[str, str]:
+        override = self._thumbnail_override(video_id)
+        if override is not None:
+            return str(override), "manual_override"
+
+        og_image = self._extract_og_image(page)
+        if og_image:
+            return og_image, "youtube_og_image"
+
+        candidates = [
+            f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg",
+            f"https://i.ytimg.com/vi/{video_id}/sddefault.jpg",
+            f"https://i.ytimg.com/vi/{video_id}/hq720.jpg",
+            f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
+            f"https://i.ytimg.com/vi/{video_id}/mqdefault.jpg",
+        ]
+        for candidate in candidates:
+            if self._thumbnail_available(candidate):
+                return candidate, "youtube_fallback"
+        return f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg", "youtube_default"
 
     def _fetch_transcript(self, video_id: str, language: str) -> List[TranscriptSnippet]:
         preferred_languages = [language, "en", "fr"]
@@ -97,6 +126,30 @@ class YouTubeClient:
             for snippet in transcript.snippets
             if snippet.text.strip()
         ]
+
+    @staticmethod
+    def _extract_og_image(page: str) -> str:
+        match = re.search(r'<meta property="og:image" content="([^"]+)"', page)
+        if not match:
+            return ""
+        return html.unescape(match.group(1))
+
+    def _thumbnail_available(self, url: str) -> bool:
+        try:
+            response = self.session.get(url, timeout=30)
+            response.raise_for_status()
+        except Exception:
+            return False
+        content_type = response.headers.get("Content-Type", "")
+        return content_type.startswith("image/")
+
+    @staticmethod
+    def _thumbnail_override(video_id: str) -> Path | None:
+        for suffix in (".png", ".jpg", ".jpeg", ".webp"):
+            candidate = THUMBNAIL_OVERRIDE_DIR / f"{video_id}{suffix}"
+            if candidate.exists():
+                return candidate
+        return None
 
     @staticmethod
     def _extract_json_string(page: str, key: str) -> str:

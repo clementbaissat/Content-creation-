@@ -9,6 +9,7 @@ from typing import List
 ROOT_DIR = Path(__file__).resolve().parents[2]
 CONFIG_PATH = ROOT_DIR / "config" / "channels.json"
 STATE_PATH = ROOT_DIR / "data" / "runtime_state.json"
+THUMBNAIL_OVERRIDE_DIR = ROOT_DIR / "thumbnail_overrides"
 
 
 @dataclass(frozen=True)

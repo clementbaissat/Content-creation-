@@ -128,6 +128,21 @@ Visual assets also have a local fallback:
 - it also creates a landscape `16:9` crop for X and wider previews
 - this works from the YouTube thumbnail, so the repo stays runnable without extra services
 
+## Thumbnail system
+
+Thumbnail resolution now follows this order:
+
+1. `thumbnail_overrides/<video_id>.*`
+2. YouTube `og:image` from the watch page
+3. Standard YouTube thumbnail fallbacks like `maxresdefault`, `sddefault`, `hq720`, and `hqdefault`
+
+If YouTube serves the wrong public thumbnail for a specific video, add the correct file under:
+
+- `thumbnail_overrides/<video_id>.jpg`
+- `thumbnail_overrides/<video_id>.png`
+
+Then rerun the pipeline with `--force` and that manual file will win automatically.
+
 ## Current limitations
 
 - thank-you emails are generated even when the guest name cannot be detected, so the greeting may need a manual edit
