@@ -24,28 +24,38 @@ class YouTubeClient:
         self.session.headers.update({"User-Agent": "Mozilla/5.0"})
         self.transcript_api = YouTubeTranscriptApi()
 
-    def latest_video(self, channel: ChannelConfig) -> VideoSummary:
+    def latest_videos(self, channel: ChannelConfig, limit: int = 1) -> List[VideoSummary]:
         response = self.session.get(
             f"https://www.youtube.com/feeds/videos.xml?channel_id={channel.channel_id}",
             timeout=30,
         )
         response.raise_for_status()
         root = ET.fromstring(response.text)
-        entry = root.find("atom:entry", RSS_NS)
-        if entry is None:
+        entries = root.findall("atom:entry", RSS_NS)
+        if not entries:
             raise RuntimeError(f"No videos found for {channel.name}")
-        video_id = entry.findtext("yt:videoId", namespaces=RSS_NS)
-        title = entry.findtext("atom:title", namespaces=RSS_NS)
-        link = entry.find("atom:link", RSS_NS)
-        published = entry.findtext("atom:published", namespaces=RSS_NS)
-        if not video_id or not title or link is None:
+        videos: List[VideoSummary] = []
+        for entry in entries[:limit]:
+            video_id = entry.findtext("yt:videoId", namespaces=RSS_NS)
+            title = entry.findtext("atom:title", namespaces=RSS_NS)
+            link = entry.find("atom:link", RSS_NS)
+            published = entry.findtext("atom:published", namespaces=RSS_NS)
+            if not video_id or not title or link is None:
+                continue
+            videos.append(
+                VideoSummary(
+                    video_id=video_id,
+                    title=title,
+                    url=link.attrib["href"],
+                    published_at=published or "",
+                )
+            )
+        if not videos:
             raise RuntimeError(f"Incomplete RSS data for {channel.name}")
-        return VideoSummary(
-            video_id=video_id,
-            title=title,
-            url=link.attrib["href"],
-            published_at=published or "",
-        )
+        return videos
+
+    def latest_video(self, channel: ChannelConfig) -> VideoSummary:
+        return self.latest_videos(channel, limit=1)[0]
 
     def video_details(self, summary: VideoSummary, language: str) -> VideoDetails:
         response = self.session.get(summary.url, timeout=30)

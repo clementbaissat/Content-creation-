@@ -42,6 +42,10 @@ class GeneratedAssets:
     summary_text: str
     hook_bank: List[str]
     linkedin_post: str
+    x_post: str
+    instagram_post: str
+    image_prompt: str
+    image_specs: List[str]
     thank_you_subject: str
     thank_you_email: str
     notes: List[str]

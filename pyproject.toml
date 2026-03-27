@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Weekly YouTube content pipeline for HopeStage French and English channels."
 requires-python = ">=3.9"
 dependencies = [
+  "Pillow>=11.0.0",
   "requests>=2.31.0",
   "youtube-transcript-api>=1.2.2"
 ]

@@ -17,11 +17,23 @@ class RuntimeState:
         channel = self.data.get(channel_slug, {})
         return channel.get("last_video_id")
 
+    def has_processed(self, channel_slug: str, video_id: str) -> bool:
+        channel = self.data.get(channel_slug, {})
+        processed_videos = channel.get("processed_videos", {})
+        if isinstance(processed_videos, dict) and video_id in processed_videos:
+            return True
+        return channel.get("last_video_id") == video_id
+
     def mark_processed(self, channel_slug: str, video_id: str, output_dir: str) -> None:
-        self.data[channel_slug] = {
-            "last_video_id": video_id,
-            "last_output_dir": output_dir,
-        }
+        channel = self.data.get(channel_slug, {})
+        processed_videos = channel.get("processed_videos", {})
+        if not isinstance(processed_videos, dict):
+            processed_videos = {}
+        processed_videos[video_id] = output_dir
+        channel["processed_videos"] = processed_videos
+        channel["last_video_id"] = video_id
+        channel["last_output_dir"] = output_dir
+        self.data[channel_slug] = channel
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)

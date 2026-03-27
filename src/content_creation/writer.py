@@ -35,6 +35,10 @@ def write_output_bundle(channel: ChannelConfig, details: VideoDetails, assets: G
     (output_dir / "summary.txt").write_text(assets.summary_text + "\n")
     (output_dir / "hooks.txt").write_text("\n\n".join(assets.hook_bank) + "\n")
     (output_dir / "linkedin_post.txt").write_text(assets.linkedin_post + "\n")
+    (output_dir / "x_post.txt").write_text(assets.x_post + "\n")
+    (output_dir / "instagram_post.txt").write_text(assets.instagram_post + "\n")
+    (output_dir / "image_prompt.txt").write_text(assets.image_prompt + "\n")
+    (output_dir / "image_specs.txt").write_text("\n".join(assets.image_specs) + "\n")
     (output_dir / "thank_you_email.txt").write_text(
         f"Subject: {assets.thank_you_subject}\n\n{assets.thank_you_email}\n"
     )
@@ -61,6 +65,18 @@ def build_bundle(channel: ChannelConfig, details: VideoDetails, assets: Generate
             "",
             "LINKEDIN POST",
             assets.linkedin_post,
+            "",
+            "X POST",
+            assets.x_post,
+            "",
+            "INSTAGRAM POST",
+            assets.instagram_post,
+            "",
+            "IMAGE PROMPT",
+            assets.image_prompt,
+            "",
+            "IMAGE SPECS",
+            *[f"- {item}" for item in assets.image_specs],
             "",
             "THANK-YOU EMAIL",
             f"Subject: {assets.thank_you_subject}",

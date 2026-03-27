@@ -2,7 +2,7 @@
 
 Weekly dual-channel content pipeline for HopeStage.
 
-This project checks the latest YouTube upload on the French and English channels, keeps a local processed-state file so runs are idempotent, and generates a reusable content bundle for each new video:
+This project checks the latest YouTube uploads on the French and English channels, keeps a local processed-state file so runs are idempotent, and generates a reusable content bundle for each new video:
 
 - video metadata
 - description snapshot
@@ -10,8 +10,12 @@ This project checks the latest YouTube upload on the French and English channels
 - thumbnail download
 - hook bank
 - LinkedIn draft
+- X draft
+- Instagram draft
+- image prompt and format specs
 - thank-you email draft for the guest
 - review notes
+- social-ready image crops from the thumbnail
 
 The output is designed for speed and reliability first. It uses deterministic local generation so it still works without extra API keys.
 
@@ -55,10 +59,22 @@ content-pipeline --channel fr
 content-pipeline --channel en
 ```
 
+Process the latest 5 videos on each channel:
+
+```bash
+content-pipeline --limit 5
+```
+
 Force regeneration for the current latest video:
 
 ```bash
 content-pipeline --channel fr --force
+```
+
+Force regeneration for the latest 5 videos on both channels:
+
+```bash
+content-pipeline --limit 5 --force
 ```
 
 ## Output structure
@@ -76,10 +92,16 @@ Each folder contains:
 - `summary.txt`
 - `hooks.txt`
 - `linkedin_post.txt`
+- `x_post.txt`
+- `instagram_post.txt`
+- `image_prompt.txt`
+- `image_specs.txt`
 - `thank_you_email.txt`
 - `notes.txt`
 - `bundle.txt`
 - `thumbnail.jpg`
+- `social_image_4x5.jpg`
+- `social_image_16x9.jpg`
 
 ## Idempotency
 
@@ -87,8 +109,8 @@ Processed video ids are stored in `data/runtime_state.json`.
 
 That means:
 
-- normal runs skip a channel when the latest video was already processed
-- `--force` rebuilds the output for the latest video
+- normal runs skip a video when it was already processed
+- `--force` rebuilds the output for the requested recent videos
 
 ## Content choices
 
@@ -99,6 +121,12 @@ The current generator is rule-based on purpose:
 - it avoids blocking the weekly workflow on missing API keys
 
 The code is split so an LLM-backed generator can be added later without changing the YouTube or file-writing logic.
+
+Visual assets also have a local fallback:
+
+- the pipeline creates a portrait `4:5` crop for Instagram and LinkedIn
+- it also creates a landscape `16:9` crop for X and wider previews
+- this works from the YouTube thumbnail, so the repo stays runnable without extra services
 
 ## Current limitations
 

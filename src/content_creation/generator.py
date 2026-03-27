@@ -16,12 +16,19 @@ def build_assets(channel: ChannelConfig, details: VideoDetails) -> GeneratedAsse
     theme = detect_theme(details, summary_text)
     hook_bank = build_hook_bank(channel.language, details, summary_text, theme)
     linkedin_post = build_linkedin_post(channel.language, details, summary_text, hook_bank[0], theme)
+    x_post = build_x_post(channel.language, details, summary_text, hook_bank[0], theme)
+    instagram_post = build_instagram_post(channel.language, details, summary_text, hook_bank[0], theme)
+    image_prompt, image_specs = build_image_brief(channel.language, details, summary_text, theme)
     thank_you_subject, thank_you_email = build_thank_you_email(channel.language, details, guest)
     notes = build_notes(details, guest)
     return GeneratedAssets(
         summary_text=summary_text,
         hook_bank=hook_bank,
         linkedin_post=linkedin_post,
+        x_post=x_post,
+        instagram_post=instagram_post,
+        image_prompt=image_prompt,
+        image_specs=image_specs,
         thank_you_subject=thank_you_subject,
         thank_you_email=thank_you_email,
         notes=notes,
@@ -154,6 +161,118 @@ def build_linkedin_post(language: str, details: VideoDetails, summary_text: str,
         f"Video: {details.summary.url}",
     ]
     return "\n".join(body)
+
+
+def build_x_post(language: str, details: VideoDetails, summary_text: str, hook: str, theme: str) -> str:
+    if theme == "decision":
+        if language == "fr":
+            candidate = (
+                "Tu te sens ultra clair ? C'est parfois le pire moment pour prendre une grande décision. "
+                "En bipolarité, une nuit de sommeil et un regard extérieur peuvent t'éviter une erreur très chère. "
+                f"{details.summary.url}"
+            )
+        else:
+            candidate = (
+                "Feeling unusually certain can be the worst moment to make a big decision. "
+                "With bipolarity, one night of sleep and outside perspective can prevent a very expensive mistake. "
+                f"{details.summary.url}"
+            )
+    elif theme == "aging":
+        if language == "fr":
+            candidate = (
+                "On parle beaucoup du diagnostic. Beaucoup moins de ce que devient la bipolarité avec l'âge. "
+                "Sommeil, routine, soutien, autonomie: la conversation doit évoluer. "
+                f"{details.summary.url}"
+            )
+        else:
+            candidate = (
+                "We talk a lot about diagnosis. Much less about what bipolarity looks like with age. "
+                "Sleep, routine, support, autonomy: the conversation needs to evolve. "
+                f"{details.summary.url}"
+            )
+    else:
+        if language == "fr":
+            candidate = f"{hook} {details.summary.url}"
+        else:
+            candidate = f"{hook} {details.summary.url}"
+    return trim_to_limit(candidate, 280)
+
+
+def build_instagram_post(language: str, details: VideoDetails, summary_text: str, hook: str, theme: str) -> str:
+    if theme == "decision":
+        if language == "fr":
+            lines = [
+                "Tu te sens très sûr de toi ?",
+                "Ce n'est pas toujours un feu vert.",
+                "",
+                "En bipolarité, la sensation de clarté peut être le moment le plus risqué.",
+                "Dors. Respire. Reviens-y demain.",
+            ]
+        else:
+            lines = [
+                "You feel unusually certain?",
+                "That is not always a green light.",
+                "",
+                "With bipolarity, clarity can be the most dangerous feeling.",
+                "Sleep first. Decide later.",
+            ]
+    elif theme == "aging":
+        if language == "fr":
+            lines = [
+                "On parle trop peu",
+                "de la bipolarité qui avance en âge.",
+                "",
+                "Le sommeil, la routine et le soutien changent tout.",
+                "Ce sujet mérite une vraie place.",
+            ]
+        else:
+            lines = [
+                "We talk too little",
+                "about growing older with bipolarity.",
+                "",
+                "Sleep, routine, and support matter even more over time.",
+                "This topic deserves more space.",
+            ]
+    else:
+        lines = [hook, "", first_meaningful_sentence(summary_text)]
+    return "\n".join(lines)
+
+
+def build_image_brief(language: str, details: VideoDetails, summary_text: str, theme: str) -> tuple[str, List[str]]:
+    if theme == "decision":
+        if language == "fr":
+            prompt = (
+                "Portrait éditorial minimaliste d'une personne devant deux chemins, tension intérieure calme, "
+                "lumière douce, palette beige et bleu grisé, ambiance HopeStage, sans texte, composition avec zone sûre centrale."
+            )
+        else:
+            prompt = (
+                "Minimal editorial portrait of a person facing two paths, calm inner tension, soft light, "
+                "beige and muted blue palette, HopeStage tone, no text, centered safe area for social crops."
+            )
+    elif theme == "aging":
+        if language == "fr":
+            prompt = (
+                "Portrait éditorial chaleureux d'une personne plus âgée dans une lumière naturelle, "
+                "ambiance stable et digne, palette sable, bleu doux et vert grisé, sans texte, style magazine santé mentale."
+            )
+        else:
+            prompt = (
+                "Warm editorial portrait of an older adult in natural light, stable and dignified mood, "
+                "sand, soft blue and muted green palette, no text, mental-health magazine style."
+            )
+    else:
+        prompt = (
+            "Editorial social image with calm natural light, human-centered composition, soft HopeStage palette, "
+            "no text, strong central safe area for multiple social crops."
+        )
+    specs = [
+        "Primary format: 4:5 portrait, 1080x1350, for Instagram and LinkedIn feed.",
+        "Secondary crop: 16:9 landscape, 1600x900, for X and wider social previews.",
+        "Keep the subject inside the central 80 percent safe area so both crops work.",
+        "No text baked into the image.",
+    ]
+    return prompt, specs
 
 
 def build_thank_you_email(language: str, details: VideoDetails, guest: GuestProfile) -> tuple[str, str]:
@@ -343,3 +462,11 @@ def normalize_terms(text: str) -> str:
     normalized = normalized.replace("Bipolar disorder", "Bipolarity")
     normalized = normalized.replace("trouble bipolaire", "bipolarité")
     return normalized
+
+
+def trim_to_limit(text: str, limit: int) -> str:
+    compact = compact_whitespace(text)
+    if len(compact) <= limit:
+        return compact
+    shortened = compact[: limit - 1].rsplit(" ", 1)[0].rstrip(" ,.;:-")
+    return shortened + "…"
