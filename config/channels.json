@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "fr",
+    "name": "HopeStage French",
+    "language": "fr",
+    "channel_id": "UCrSbZKyKDQr6buSQUDJdyRw",
+    "channel_url": "https://www.youtube.com/@HopeStage-FR/videos",
+    "output_dir": "outputs/fr"
+  },
+  {
+    "slug": "en",
+    "name": "HopeStage English",
+    "language": "en",
+    "channel_id": "UCcM-WFklXosCUIJpZu_dvgA",
+    "channel_url": "https://www.youtube.com/@clementbaissat-HopeStage/videos",
+    "output_dir": "outputs/en"
+  }
+]

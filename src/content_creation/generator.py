@@ -1,0 +1,345 @@
+from __future__ import annotations
+
+import re
+from collections import defaultdict
+from typing import List
+
+from .config import ChannelConfig
+from .models import GeneratedAssets, GuestProfile, VideoDetails
+from .utils import compact_whitespace, timestamp_label
+
+
+def build_assets(channel: ChannelConfig, details: VideoDetails) -> GeneratedAssets:
+    guest = infer_guest(details)
+    transcript_text = build_transcript_text(details)
+    summary_text = build_summary(details, transcript_text)
+    theme = detect_theme(details, summary_text)
+    hook_bank = build_hook_bank(channel.language, details, summary_text, theme)
+    linkedin_post = build_linkedin_post(channel.language, details, summary_text, hook_bank[0], theme)
+    thank_you_subject, thank_you_email = build_thank_you_email(channel.language, details, guest)
+    notes = build_notes(details, guest)
+    return GeneratedAssets(
+        summary_text=summary_text,
+        hook_bank=hook_bank,
+        linkedin_post=linkedin_post,
+        thank_you_subject=thank_you_subject,
+        thank_you_email=thank_you_email,
+        notes=notes,
+    )
+
+
+def infer_guest(details: VideoDetails) -> GuestProfile:
+    title = details.summary.title
+    searchable = " ".join([title, details.description])
+    patterns = [
+        r"\bwith (?P<name>[A-Z][A-Za-z.\-]+(?: [A-Z][A-Za-z.\-]+){0,3})",
+        r"\bavec (?P<name>[A-Z][A-Za-z.\-]+(?: [A-Z][A-Za-z.\-]+){0,3})",
+        r"\bi sit down with (?P<name>[A-Z][A-Za-z.\-]+(?: [A-Z][A-Za-z.\-]+){0,3})",
+        r"\bconversation with (?P<name>[A-Z][A-Za-z.\-]+(?: [A-Z][A-Za-z.\-]+){0,3})",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, searchable)
+        if match:
+            return GuestProfile(name=match.group("name").strip(), detected_from="title")
+    if "interview" in title.lower() or "podcast" in title.lower():
+        return GuestProfile(name=None, detected_from="interview_without_name")
+    return GuestProfile(name=None, detected_from="host_only_or_unknown")
+
+
+def build_transcript_text(details: VideoDetails) -> str:
+    if not details.transcript:
+        return compact_whitespace(details.description)
+    return compact_whitespace(" ".join(snippet.text for snippet in details.transcript))
+
+
+def build_summary(details: VideoDetails, transcript_text: str) -> str:
+    description_lines = [
+        normalize_terms(compact_whitespace(line).replace("👉", ""))
+        for line in details.description.splitlines()
+        if compact_whitespace(line)
+        and "http" not in line
+        and not compact_whitespace(line).startswith("#")
+        and len(compact_whitespace(line)) > 20
+    ]
+    if description_lines:
+        core = description_lines[:3]
+        return " ".join(core)
+    sentences = [normalize_terms(sentence) for sentence in split_sentences(transcript_text)]
+    return " ".join(sentences[:3])
+
+
+def build_hook_bank(language: str, details: VideoDetails, summary_text: str, theme: str) -> List[str]:
+    primary = first_meaningful_sentence(summary_text)
+    if theme == "decision":
+        if language == "fr":
+            return [
+                "Tu crois voir clair. Et c'est peut-être justement là que le danger commence.",
+                "Cette vidéo parle d'un piège discret en bipolarité : prendre une décision au moment où tout te semble évident.",
+                "Certaines décisions ne détruisent pas une journée. Elles déplacent toute une vie.",
+                "Avant de quitter, casser, acheter ou annoncer quelque chose, il y a une question à se poser.",
+                primary,
+            ]
+        return [
+            "The worst time to make a life decision might be the moment you feel the most certain.",
+            "This episode looks at a quiet trap in bipolarity: confusing certainty with clarity.",
+            "Some decisions do not ruin a day. They redirect a whole life.",
+            "Before you quit, buy, break, or announce something big, pause here first.",
+            primary,
+        ]
+    if theme == "aging":
+        if language == "fr":
+            return [
+                "On parle souvent du diagnostic. Beaucoup moins de ce que devient la bipolarité avec l'âge.",
+                "Vieillir avec une bipolarité, ce n'est pas juste continuer pareil plus longtemps.",
+                "Certaines questions deviennent plus importantes avec l'âge : sommeil, traitements, autonomie, entourage.",
+                "Ce sujet est rarement visible, alors qu'il concerne l'avenir de beaucoup de personnes.",
+                primary,
+            ]
+        return [
+            "We talk a lot about diagnosis. Much less about what bipolarity looks like as people grow older.",
+            "Growing older with bipolarity is not just the same story repeated for longer.",
+            "Age changes the conversation: sleep, treatment, autonomy, relationships, and long-term support.",
+            "This is an under-discussed mental health topic that deserves much more attention.",
+            primary,
+        ]
+    if language == "fr":
+        return [
+            "Il y a des sujets qu'on devrait entendre plus tôt, plus clairement, et avec plus d'humanité.",
+            "Cette vidéo met des mots simples sur une expérience que beaucoup vivent sans réussir à l'expliquer.",
+            "Quand on parle de bipolarité avec précision, on crée déjà un peu plus de stabilité.",
+            primary,
+            "Ce sujet mérite plus qu'un slogan. Il mérite une vraie conversation.",
+        ]
+    return [
+        "Some topics need less noise and more clarity.",
+        "This episode puts simple language around an experience many people live without knowing how to describe.",
+        "Talking about bipolarity with precision creates a little more stability and a lot less stigma.",
+        primary,
+        "This subject deserves more than a slogan. It deserves a real conversation.",
+    ]
+
+
+def build_linkedin_post(language: str, details: VideoDetails, summary_text: str, hook: str, theme: str) -> str:
+    notes = minute_notes(details)
+    summary_sentence = normalize_terms(summary_text)
+    bullets, closing_question = linkedin_scaffold(language, theme)
+    if language == "fr":
+        body = [
+            hook,
+            "",
+            f"Dans cette nouvelle vidéo HopeStage, on parle d'un sujet central : {summary_sentence}",
+            "",
+            notes[0] if notes else fallback_note(language, theme),
+            "",
+            "Ce que je retiens :",
+            *[f"• {item}" for item in bullets],
+            "",
+            closing_question,
+            "",
+            f"Vidéo : {details.summary.url}",
+        ]
+        return "\n".join(body)
+    body = [
+        hook,
+        "",
+        f"In this week's HopeStage video, we focus on a core question: {summary_sentence}",
+        "",
+        notes[0] if notes else fallback_note(language, theme),
+        "",
+        "What stood out to me:",
+        *[f"• {item}" for item in bullets],
+        "",
+        closing_question,
+        "",
+        f"Video: {details.summary.url}",
+    ]
+    return "\n".join(body)
+
+
+def build_thank_you_email(language: str, details: VideoDetails, guest: GuestProfile) -> tuple[str, str]:
+    if guest.detected_from == "host_only_or_unknown":
+        if language == "fr":
+            return (
+                "Aucun invité détecté",
+                "\n".join(
+                    [
+                        "Aucun invité externe n'a été détecté automatiquement pour cette vidéo.",
+                        "Vérifie si c'est un épisode solo avant d'envoyer un email de remerciement.",
+                    ]
+                ),
+            )
+        return (
+            "No guest detected",
+            "\n".join(
+                [
+                    "No external guest was detected automatically for this video.",
+                    "Check whether this is a solo episode before sending a thank-you email.",
+                ]
+            ),
+        )
+    if language == "fr":
+        subject = "Merci pour ton échange avec HopeStage"
+        opener = f"Bonjour {guest.name}," if guest.name else "Bonjour,"
+        body = [
+            opener,
+            "",
+            "Merci encore d'avoir pris le temps de participer à cette conversation avec HopeStage.",
+            "L'échange était clair, généreux et utile. Il va vraiment aider d'autres personnes à prendre du recul, à mieux comprendre leur bipolarité et à se sentir moins seules.",
+            "",
+            f"La vidéo est maintenant en ligne : {details.summary.url}",
+            "",
+            "Si tu veux, je peux aussi te partager les extraits ou les posts que nous allons préparer autour de cet échange.",
+            "",
+            "Merci encore pour ta confiance,",
+            "Clément",
+            "HopeStage",
+        ]
+        if not guest.name:
+            body.insert(3, "Le prénom de la personne invitée n'a pas été détecté automatiquement. Pense à personnaliser l'ouverture avant envoi.")
+        return subject, "\n".join(body)
+    subject = "Thank you for joining HopeStage"
+    opener = f"Hi {guest.name}," if guest.name else "Hi,"
+    body = [
+        opener,
+        "",
+        "Thank you again for taking the time to join this conversation with HopeStage.",
+        "The exchange was generous, grounded, and genuinely useful. It will help more people understand bipolarity with more clarity and less stigma.",
+        "",
+        f"The video is now live: {details.summary.url}",
+        "",
+        "If helpful, I can also share the clips or draft posts we prepare around the episode.",
+        "",
+        "Thank you again,",
+        "Clément",
+        "HopeStage",
+    ]
+    if not guest.name:
+        body.insert(3, "The guest name was not detected automatically, so the greeting should be personalized before sending.")
+    return subject, "\n".join(body)
+
+
+def build_notes(details: VideoDetails, guest: GuestProfile) -> List[str]:
+    notes = []
+    if not details.transcript_available:
+        notes.append("Transcript was not available, so copy was generated from title and description only.")
+    if guest.detected_from != "title":
+        notes.append("Guest name should be checked manually before sending the thank-you email.")
+    notes.extend(minute_notes(details)[:3])
+    return notes
+
+
+def minute_notes(details: VideoDetails) -> List[str]:
+    buckets = defaultdict(list)
+    for snippet in details.transcript:
+        buckets[int(snippet.start // 60)].append(snippet.text)
+    notes = []
+    for minute in sorted(buckets)[:5]:
+        text = compact_whitespace(" ".join(buckets[minute]))
+        if not text:
+            continue
+        notes.append(f"[{minute:02d}:00] {text[:220].rstrip()}...")
+    return notes
+
+
+def split_sentences(text: str) -> List[str]:
+    return [compact_whitespace(part) for part in re.split(r"(?<=[.!?])\s+", text) if compact_whitespace(part)]
+
+
+def first_meaningful_sentence(text: str) -> str:
+    for sentence in split_sentences(text):
+        if len(sentence) >= 50:
+            return sentence
+    return normalize_terms(compact_whitespace(text))
+
+
+def detect_theme(details: VideoDetails, summary_text: str) -> str:
+    haystack = normalize_terms(" ".join([details.summary.title, details.description, summary_text])).lower()
+    if any(token in haystack for token in ["decision", "décision", "quit", "demission", "divorce"]):
+        return "decision"
+    if any(token in haystack for token in ["grow older", "older", "ageing", "aging", "geriatric"]):
+        return "aging"
+    return "general"
+
+
+def linkedin_scaffold(language: str, theme: str) -> tuple[List[str], str]:
+    if theme == "decision":
+        if language == "fr":
+            return (
+                [
+                    "le sentiment de clarté n'est pas toujours fiable",
+                    "le sommeil et le niveau d'activation changent la qualité d'une décision",
+                    "demander un regard extérieur peut éviter une erreur lourde",
+                ],
+                "Question simple à garder : est-ce que cette décision me semble toujours juste demain, après du sommeil et du recul ?",
+            )
+        return (
+            [
+                "certainty is not the same as clarity",
+                "sleep and activation level change decision quality",
+                "outside perspective can prevent expensive mistakes",
+            ],
+            "A useful question to keep close: will this decision still feel right tomorrow, after sleep and perspective?",
+        )
+    if theme == "aging":
+        if language == "fr":
+            return (
+                [
+                    "le vieillissement change concrètement la manière de parler de bipolarité",
+                    "la stabilité à long terme dépend aussi de sommeil, de routine et d'ajustements réalistes",
+                    "on manque encore de conversations accessibles sur l'avancée en âge",
+                ],
+                "Question utile : qu'est-ce qui devient plus important pour protéger la stabilité quand on avance en âge ?",
+            )
+        return (
+            [
+                "age changes the practical conversation around bipolarity",
+                "long-term stability depends on sleep, routine, and realistic support",
+                "we still do not talk enough about bipolarity across the full lifespan",
+            ],
+            "Useful question: what becomes more important for stability as someone grows older?",
+        )
+    if language == "fr":
+        return (
+            [
+                "le sujet mérite plus de nuance et moins de raccourcis",
+                "les expériences vécues demandent des mots simples et précis",
+                "une bonne conversation peut déjà réduire une partie du stigma",
+            ],
+            "Question utile : quelle idée de cette vidéo mérite d'être gardée pour la semaine ?",
+        )
+    return (
+        [
+            "the topic deserves more nuance and less noise",
+            "lived experience needs simple and precise language",
+            "a better conversation can already reduce stigma",
+        ],
+        "Useful question: what is one idea from this video worth carrying into the week?",
+    )
+
+
+def fallback_note(language: str, theme: str) -> str:
+    if theme == "decision":
+        return (
+            "Le point central : une grande décision mérite du recul, surtout quand tout paraît urgent."
+            if language == "fr"
+            else "The central point: a major decision deserves distance, especially when everything feels urgent."
+        )
+    if theme == "aging":
+        return (
+            "Le point central : on parle trop peu de ce que devient la bipolarité avec l'âge."
+            if language == "fr"
+            else "The central point: we still talk far too little about what bipolarity looks like with age."
+        )
+    return (
+        "Le point central : cette vidéo met de la clarté sur une expérience souvent mal comprise."
+        if language == "fr"
+        else "The central point: this video adds clarity to an experience that is often misunderstood."
+    )
+
+
+def normalize_terms(text: str) -> str:
+    normalized = compact_whitespace(text)
+    normalized = normalized.replace("bipolar disorder", "bipolarity")
+    normalized = normalized.replace("Bipolar disorder", "Bipolarity")
+    normalized = normalized.replace("trouble bipolaire", "bipolarité")
+    return normalized

@@ -1,0 +1,4 @@
+Subject: Aucun invité détecté
+
+Aucun invité externe n'a été détecté automatiquement pour cette vidéo.
+Vérifie si c'est un épisode solo avant d'envoyer un email de remerciement.
