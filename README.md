@@ -15,7 +15,7 @@ This project checks the latest YouTube uploads on the French and English channel
 - image prompt and format specs
 - thank-you email draft for the guest
 - review notes
-- social-ready image crops from the thumbnail
+- social-ready image crops from the thumbnail, including Instagram carousel square exports
 
 The output is designed for speed and reliability first. It uses deterministic local generation so it still works without extra API keys.
 
@@ -121,6 +121,7 @@ Each folder contains:
 - `notes.txt`
 - `bundle.txt`
 - `thumbnail.jpg`
+- `social_image_1x1.jpg`
 - `social_image_4x5.jpg`
 - `social_image_16x9.jpg`
 
@@ -145,9 +146,20 @@ The code is split so an LLM-backed generator can be added later without changing
 
 Visual assets also have a local fallback:
 
-- the pipeline creates a portrait `4:5` crop for Instagram and LinkedIn
+- the pipeline creates a square `1:1` crop for Instagram carousel slides
+- it also creates a portrait `4:5` crop for Instagram single-image posts and LinkedIn
 - it also creates a landscape `16:9` crop for X and wider previews
 - this works from the YouTube thumbnail, so the repo stays runnable without extra services
+
+## Feedback memory
+
+The repo now includes [`FEEDBACK_MEMORY.md`](FEEDBACK_MEMORY.md) for recurring editorial and visual corrections.
+
+Current reusable learnings include:
+
+- use canonical HopeStage logos from `assets/brand/`, not older desktop exports
+- default Instagram carousel slides to `1:1` square, not generic `4:5`
+- keep brand and CTA elements inside a generous square safe zone
 
 ## Thumbnail system
 

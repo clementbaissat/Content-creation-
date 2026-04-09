@@ -5,6 +5,7 @@ from pathlib import Path
 from PIL import Image, ImageFilter
 
 
+SQUARE_SIZE = (1080, 1080)
 PORTRAIT_SIZE = (1080, 1350)
 LANDSCAPE_SIZE = (1600, 900)
 
@@ -12,8 +13,10 @@ LANDSCAPE_SIZE = (1600, 900)
 def render_social_images(thumbnail_path: Path, output_dir: Path) -> None:
     with Image.open(thumbnail_path) as image:
         base = image.convert("RGB")
+        square = cover_resize(base, SQUARE_SIZE)
         portrait = build_portrait_from_thumbnail(base)
         landscape = cover_resize(base, LANDSCAPE_SIZE)
+        square.save(output_dir / "social_image_1x1.jpg", quality=92)
         portrait.save(output_dir / "social_image_4x5.jpg", quality=92)
         landscape.save(output_dir / "social_image_16x9.jpg", quality=92)
 

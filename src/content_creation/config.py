@@ -11,6 +11,13 @@ CONFIG_PATH = ROOT_DIR / "config" / "channels.json"
 FOUNDER_PROFILE_PATH = ROOT_DIR / "config" / "founder_profile.json"
 STATE_PATH = ROOT_DIR / "data" / "runtime_state.json"
 THUMBNAIL_OVERRIDE_DIR = ROOT_DIR / "thumbnail_overrides"
+BRAND_ASSET_DIR = ROOT_DIR / "assets" / "brand"
+CANONICAL_BRAND_ASSETS = {
+    "pale_background_lockup": BRAND_ASSET_DIR / "Frame 10.png",
+    "horizontal_wordmark": BRAND_ASSET_DIR / "HopeStage logo home.png",
+    "square_dark_lockup": BRAND_ASSET_DIR / "HopeStage google logo.png",
+    "icon_mark": BRAND_ASSET_DIR / "hopestage 256.png",
+}
 
 
 @dataclass(frozen=True)

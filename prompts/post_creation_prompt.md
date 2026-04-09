@@ -5,6 +5,7 @@ Use the repository files below before drafting:
 - `VOICE_PROFILE.md`
 - `CONTENT_SYSTEM.md`
 - `DESIGN_GUIDELINES.md`
+- `FEEDBACK_MEMORY.md`
 - `config/founder_profile.json`
 
 Use these public reference sources when relevant:
@@ -51,3 +52,5 @@ Create a HopeStage post that sounds like Clement Baissat.
 - No jargon
 - No corporate phrasing
 - No stigmatizing wording
+- For Instagram carousels, think in square slides first.
+- If branded visuals are involved, use the canonical files under `assets/brand/`.

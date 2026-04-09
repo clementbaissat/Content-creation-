@@ -75,9 +75,17 @@ Canonical repo-stored logo and icon files are tracked in:
 ## Composition Rules
 
 - Keep central safe space for multiple crops.
-- Design primarily for `4:5`, then adapt to `16:9`.
+- For Instagram carousel slides, design primarily for `1:1`.
+- For single-image feed assets, design for `4:5`, then adapt to `16:9`.
 - Favor breathing room over crowded layouts.
 - Use contrast to create clarity, not aggression.
+- Keep logo lockups, CTA bars, and small metadata away from the outer edges so platform chrome does not crowd them.
+
+## Brand Asset Discipline
+
+- Use canonical logo and icon files from `assets/brand/`.
+- Do not pull older HopeStage logo exports from miscellaneous desktop folders when an approved repo asset exists.
+- On light backgrounds, prefer `assets/brand/HopeStage logo home.png` or `assets/brand/Frame 10.png`.
 
 ## Emoji Rule
 

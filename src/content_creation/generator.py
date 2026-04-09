@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import List
 
 from .config import ChannelConfig, FounderProfile, load_founder_profile
+from .feedback import social_visual_feedback_specs
 from .models import GeneratedAssets, GuestProfile, VideoDetails
 from .utils import compact_whitespace, timestamp_label
 
@@ -293,12 +294,7 @@ def build_image_brief(
             "Editorial social image with calm natural light, human-centered composition, "
             f"palette {palette}, {direction}, no text, strong central safe area for multiple social crops."
         )
-    specs = [
-        "Primary format: 4:5 portrait, 1080x1350, for Instagram and LinkedIn feed.",
-        "Secondary crop: 16:9 landscape, 1600x900, for X and wider social previews.",
-        "Keep the subject inside the central 80 percent safe area so both crops work.",
-        "No text baked into the image.",
-    ]
+    specs = social_visual_feedback_specs()
     return prompt, specs
 
 
