@@ -50,3 +50,19 @@ class GeneratedAssets:
     thank_you_subject: str
     thank_you_email: str
     notes: List[str]
+
+
+@dataclass(frozen=True)
+class ContentRequest:
+    request_text: str
+    source_kind: str
+    source_url: Optional[str]
+    content_kind: str
+    language: str
+    outputs: List[str]
+    latest_only: bool
+    needs_visual: bool
+    needs_thumbnail: bool
+    needs_transcript: bool
+    workflow_steps: List[str]
+    notes: List[str]

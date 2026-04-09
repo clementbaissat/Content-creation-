@@ -5,6 +5,7 @@ This file translates the official HopeStage brand page into a repo-friendly desi
 Source:
 
 - [HopeStage Brand Guidelines (EN)](https://www.notion.so/hopestage/HopeStage-Brand-Guidelines-EN-24239dda6d2880ed93d4e25c0675564d)
+- `assets/brand/README.md`
 
 ## Visual Direction
 
@@ -55,6 +56,11 @@ It should communicate:
 - recovery
 - humanity
 - recognizability
+
+Canonical repo-stored logo and icon files are tracked in:
+
+- `assets/brand/README.md`
+- `assets/brand/manifest.json`
 
 ## Image Direction
 

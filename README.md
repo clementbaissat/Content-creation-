@@ -25,9 +25,11 @@ The repository now includes a reusable HopeStage content system:
 
 - `VOICE_PROFILE.md` for plain-language voice guidance
 - `CONTENT_SYSTEM.md` for content strategy and usage
+- `CONTENT_REQUEST_WORKFLOW.md` for simple natural-language request handling
 - `DESIGN_GUIDELINES.md` for the working visual direction
 - `config/founder_profile.json` for machine-readable founder and brand context
 - `prompts/post_creation_prompt.md` for future prompting and drafting
+- `prompts/task_router_prompt.md` for routing short content requests
 
 The generator reads `config/founder_profile.json` so new drafts can reflect Clement's lived experience, expertise, and HopeStage's positioning more consistently.
 The design layer is now aligned with the official Notion brand page: [HopeStage Brand Guidelines (EN)](https://www.notion.so/hopestage/HopeStage-Brand-Guidelines-EN-24239dda6d2880ed93d4e25c0675564d).
@@ -88,6 +90,12 @@ Force regeneration for the latest 5 videos on both channels:
 
 ```bash
 content-pipeline --limit 5 --force
+```
+
+Parse a simple natural-language request into a structured content workflow:
+
+```bash
+content-intake --request "Prepare me a LinkedIn post for my latest interview in French and give me the thumbnail."
 ```
 
 ## Output structure

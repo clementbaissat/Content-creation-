@@ -1,0 +1,38 @@
+{
+  "source": "User-provided HopeStage brand assets",
+  "usage": "Canonical repo-stored logo and icon files for content creation and image generation references.",
+  "files": [
+    {
+      "filename": "Frame 10.png",
+      "relative_path": "assets/brand/Frame 10.png",
+      "width": 251,
+      "height": 105,
+      "role": "pale_background_brand_lockup",
+      "sha256": "1501a1133681dbbcc48c2f90e146a7ef722ac9b73dcfa973698eba6467496864"
+    },
+    {
+      "filename": "hopestage 256.png",
+      "relative_path": "assets/brand/hopestage 256.png",
+      "width": 256,
+      "height": 256,
+      "role": "icon_mark",
+      "sha256": "44127062894f416a2634bfc4a9c05d9ea1ebcdf4856798cf0486501a5f758c29"
+    },
+    {
+      "filename": "HopeStage google logo.png",
+      "relative_path": "assets/brand/HopeStage google logo.png",
+      "width": 310,
+      "height": 310,
+      "role": "square_logo_lockup_dark",
+      "sha256": "825dd9f8bf29bc41a7ce9043522fe43150d5c71316da7a88407f44809a6373cb"
+    },
+    {
+      "filename": "HopeStage logo home.png",
+      "relative_path": "assets/brand/HopeStage logo home.png",
+      "width": 304,
+      "height": 173,
+      "role": "horizontal_wordmark_lockup",
+      "sha256": "1bdbed012bbb206df3ff81af1b33523004e51c3d6a34e9b88629df38eac8b5f3"
+    }
+  ]
+}

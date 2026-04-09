@@ -5,6 +5,11 @@ This repository now contains two layers of context:
 - `VOICE_PROFILE.md`: plain-language explanation of Clement's voice
 - `config/founder_profile.json`: structured machine-readable profile for prompts, tooling, and future automations
 
+Canonical local brand assets are stored in:
+
+- `assets/brand/README.md`
+- `assets/brand/manifest.json`
+
 The brand and design layer is now grounded in the official Notion page:
 
 - [HopeStage Brand Guidelines (EN)](https://www.notion.so/hopestage/HopeStage-Brand-Guidelines-EN-24239dda6d2880ed93d4e25c0675564d)
@@ -136,3 +141,5 @@ For French drafting, strongly prioritize:
 The repository now uses the official brand color system and typography direction from Notion, combined with Clement's founder context.
 
 Use the design tokens in `config/founder_profile.json` as the current working source of truth inside the codebase.
+
+For exact logo and icon usage, use the files in `assets/brand/`.

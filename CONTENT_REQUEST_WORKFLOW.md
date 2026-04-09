@@ -1,0 +1,73 @@
+# HopeStage Simple Content Request Workflow
+
+This file defines the simplest way to ask for content work in plain language.
+
+The goal is that Clement can talk naturally and still get a clean deliverable.
+
+## Default Request Style
+
+You should be able to ask things like:
+
+- `Prepare me a LinkedIn post for the latest interview I did in English.`
+- `Fais-moi un post LinkedIn en français pour ma dernière interview, avec la miniature.`
+- `Use this video and prepare an Instagram post plus thumbnail: <url>`
+- `I recorded a voice note with an idea. Turn it into a LinkedIn post.`
+- `Take this transcript and create a post for LinkedIn and Instagram.`
+
+## Supported Inputs
+
+- latest interview
+- latest video
+- podcast episode URL
+- YouTube or video URL
+- transcript
+- voice recording or voice note
+- rough text idea
+
+## Supported Outputs
+
+- LinkedIn post
+- Instagram post
+- X post
+- blog article
+- newsletter draft
+- thumbnail direction
+- image prompt
+
+## Default Behavior
+
+- If language is not specified, default to the source language.
+- If the request mentions the latest interview or latest video, fetch the newest relevant source first.
+- If the request is based on a voice note, extract the core idea before drafting.
+- If the request asks for a thumbnail or image, also prepare a visual direction or image prompt.
+- Keep all outputs aligned with HopeStage voice and brand guidance.
+
+## Core Workflow
+
+1. Find the source.
+2. Understand the main idea and emotional angle.
+3. Identify the practical takeaway.
+4. Draft the requested content in the right language.
+5. Add visual direction when needed.
+
+## Voice Expectations
+
+- Scientific but human
+- Direct but kind
+- Friendly but respectful
+- Inspiring, not preachy
+- Clear, practical, and useful
+
+## Quick Examples
+
+### English
+
+`Prepare me a LinkedIn post for my latest interview in English and give me the thumbnail.`
+
+### French
+
+`Prépare-moi un post LinkedIn pour ma dernière interview en français, avec une miniature.`
+
+### Voice Note
+
+`I have a voice recording with a content idea. Turn it into a LinkedIn post and an Instagram caption.`
