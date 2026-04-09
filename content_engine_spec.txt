@@ -1,0 +1,163 @@
+CONTENT ENGINE SPECIFICATION
+
+Purpose
+
+Build a content generation system for a founder creating content in mental health and patient engagement.
+
+
+1. CREATOR PROFILE
+
+Tone
+- Scientific but human
+- Direct
+- Inspiring but not preachy
+
+Style
+- Informal
+- Sharp
+- Concise
+
+Goal
+- Make people think differently
+
+Desired reaction
+- "I hadn't thought about it like that"
+
+Core format
+- Short, punchy posts
+
+Primary approach
+- Storytelling built from personal anecdotes and insights
+
+
+2. CONTENT PHILOSOPHY
+
+- Challenge existing paradigms
+- Question assumptions people think are fixed
+- Bring new mental models
+- Use real conversations with high-level people as inspiration
+- Focus on insight, not noise
+
+
+3. CORE TOPICS
+
+- Mental health
+- Patient experience
+- Patient engagement
+- Clinical trials and adoption
+- Trust in healthcare
+- Systemic gaps in psychiatry and healthcare
+
+
+4. INPUT FORMAT
+
+The system receives:
+
+- Long-form content
+  - Text
+  - Notes
+  - Transcripts
+  - Ideas
+- Optional context
+
+Constraint
+- No manual rewriting required
+
+
+5. OUTPUT REQUIREMENTS
+
+The system must generate platform-specific content.
+
+LinkedIn
+- 1 short post
+- 5 to 10 lines maximum
+- Strong hook in the first line
+- Storytelling plus insight
+- Clear takeaway or perspective shift
+
+X (Twitter)
+- 3 to 5 tweets or a thread
+- Very punchy
+- One idea per tweet
+- No fluff
+
+Instagram (optional)
+- Short caption
+- Insight-driven
+- Can reuse LinkedIn logic but shorter
+
+
+6. IMAGE GENERATION
+
+For each post:
+
+- Generate a minimalist image
+- Style:
+  - Calm
+  - Modern
+  - Clean
+- No text inside the image
+- Use abstract or symbolic visuals
+
+Colors
+- #154545
+- #E6E5B3
+
+
+7. WRITING RULES
+
+- Avoid generic content
+- Avoid clichés
+- Avoid AI tone
+- Always aim for insight or tension
+- Prefer concrete over abstract
+- Use simple language
+- Keep it short
+
+
+8. CONTENT STRUCTURE TEMPLATE
+
+Each post should follow:
+
+1. Hook
+   - Surprising or counterintuitive
+2. Short story or observation
+3. Insight
+   - Shift in perspective
+4. Optional closing line
+   - Provocative or reflective
+
+
+9. AUTOMATION LOGIC
+
+1. Input long-form content
+2. Extract key insights
+3. Reframe into storytelling
+4. Adapt format per platform
+5. Generate associated image
+6. Output ready-to-post content
+
+
+10. EXPECTED OUTPUT FORMAT
+
+Return structured output like:
+
+LINKEDIN POST:
+...
+
+X THREAD:
+1.
+2.
+3.
+
+INSTAGRAM:
+...
+
+IMAGE PROMPT:
+...
+
+
+FINAL INSTRUCTION
+
+- Save everything in content_engine_spec.txt
+- Ensure the file is clean, readable, and well structured
