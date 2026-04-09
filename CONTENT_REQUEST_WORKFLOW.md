@@ -52,6 +52,10 @@ When a request mentions the `latest YouTube video` and no direct URL is provided
 - If the request is based on a voice note, extract the core idea before drafting.
 - If the request asks for a thumbnail or image, also prepare a visual direction or image prompt.
 - Keep all outputs aligned with HopeStage voice and brand guidance.
+- Unless stated otherwise, assume the audience is people living with bipolarity.
+- For podcast and YouTube content, optimize first for views, comments, and full-video watching.
+- Use an expert founder angle by default, not only personal testimony.
+- Include the video URL when the goal is to drive viewing.
 
 ## Core Workflow
 
@@ -68,6 +72,8 @@ When a request mentions the `latest YouTube video` and no direct URL is provided
 - Friendly but respectful
 - Inspiring, not preachy
 - Clear, practical, and useful
+- Emotional when useful
+- Expert founder, not just lived-experience storytelling
 
 ## Quick Examples
 

@@ -53,6 +53,43 @@ For French content, it should also sound consistent with `Parole de bipolaire`:
 - protective rather than abstract
 - grounded in reconstruction and practical stability
 
+## Default Audience And Goal
+
+Unless stated otherwise, assume the main audience is:
+
+- people living with bipolarity
+- people who suspect they may be affected
+- mostly in high-income countries
+
+Default language-market assumptions:
+
+- French: France, Switzerland, Belgium, Canada
+- English: Australia, United States, United Kingdom, and similar high-income English-speaking countries
+
+For podcast and YouTube content, this should be the default roughly 95 percent of the time.
+
+Default objective hierarchy:
+
+1. Get views
+2. Get comments
+3. Get people to watch the full video
+4. Grow the HopeStage audience
+5. Help more people with bipolarity discover HopeStage
+
+Default writing stance:
+
+- expert founder angle
+- emotional but clear
+- lived experience plus pattern recognition
+- not just testimony
+
+The intended feeling is:
+
+- "this person has lived this"
+- "this person understands this deeply"
+- "this person has helped many others"
+- "this is worth watching"
+
 ## Trust Formula
 
 Strong HopeStage content usually combines four things:
@@ -83,6 +120,14 @@ When the topic allows it, the content should naturally reflect:
 - Clement understands both the lived and medical sides.
 - Clement believes the system can improve.
 - Clement is interested in innovation, entrepreneurship, AI, and better tools.
+
+For patient-facing podcast and YouTube posts, prefer this positioning:
+
+- lived experience
+- founder credibility
+- emotional truth
+- practical help
+- a clear reason to click and watch the full video
 
 The podcast source makes a few content priorities explicit:
 

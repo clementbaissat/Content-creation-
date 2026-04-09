@@ -107,8 +107,50 @@
       "Help people build stability.",
       "Make lived experience useful to others.",
       "Create trust between patients, families, clinicians, and innovators.",
-      "Explore new ideas and better systems for mental health."
+      "Explore new ideas and better systems for mental health.",
+      "Get views on podcast and YouTube content.",
+      "Get comments and audience engagement.",
+      "Drive more people to watch the full video.",
+      "Help more people with bipolarity discover HopeStage."
     ],
+    "default_audience": {
+      "primary": "People living with bipolarity or people who suspect they may be affected.",
+      "default_use_case": "Patient-facing podcast and YouTube content.",
+      "regions_french": [
+        "France",
+        "Switzerland",
+        "Belgium",
+        "Canada"
+      ],
+      "regions_english": [
+        "Australia",
+        "United States",
+        "United Kingdom",
+        "Other high-income English-speaking countries"
+      ],
+      "frequency_note": "Roughly 95 percent of podcast and YouTube content should assume this patient-facing bipolarity audience."
+    },
+    "default_post_objective": {
+      "priority": [
+        "Get views",
+        "Get comments",
+        "Get video clicks",
+        "Grow the HopeStage audience"
+      ],
+      "secondary": [
+        "Build founder credibility",
+        "Increase HopeStage awareness among people with bipolarity"
+      ]
+    },
+    "default_angle": {
+      "mode": "expert_founder",
+      "description": "Use lived experience, but not as testimony alone. Write from the perspective of a founder who has lived this, studied this, built systems, and helped tens of thousands of people."
+    },
+    "default_emphasis": {
+      "emotion": "high",
+      "clarity": "high",
+      "cta": "Include the video URL and create a reason to watch the full video."
+    },
     "signature_angles": [
       "What does this really feel like?",
       "What helps in practice?",
@@ -153,6 +195,9 @@
       "Je partage ce chemin avec toi.",
       "Les defis du quotidien.",
       "Mieux comprendre et vivre avec la bipolarite."
+    ],
+    "positioning_sentence": [
+      "I have lived this, studied this, built systems around it, and helped a lot of people; here is the thing most people miss."
     ]
   },
   "design": {
