@@ -3,11 +3,12 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 CONFIG_PATH = ROOT_DIR / "config" / "channels.json"
+FOUNDER_PROFILE_PATH = ROOT_DIR / "config" / "founder_profile.json"
 STATE_PATH = ROOT_DIR / "data" / "runtime_state.json"
 THUMBNAIL_OVERRIDE_DIR = ROOT_DIR / "thumbnail_overrides"
 
@@ -20,6 +21,29 @@ class ChannelConfig:
     channel_id: str
     channel_url: str
     output_dir: Path
+
+
+@dataclass(frozen=True)
+class FounderProfile:
+    founder_name: str
+    organization: str
+    intro: str
+    age: int
+    stable_years: int
+    lived_experience: List[str]
+    expertise: List[str]
+    worldview: List[str]
+    references: Dict[str, List[str]]
+    voice_traits: List[str]
+    trust_builders: List[str]
+    avoid: List[str]
+    required_terms: List[str]
+    blocked_terms: List[str]
+    signature_angles: List[str]
+    default_structure: List[str]
+    visual_direction: str
+    design_palette: Dict[str, str]
+    imagery_rules: List[str]
 
 
 def load_channels() -> List[ChannelConfig]:
@@ -35,3 +59,32 @@ def load_channels() -> List[ChannelConfig]:
         )
         for item in raw
     ]
+
+
+def load_founder_profile() -> FounderProfile:
+    raw = json.loads(FOUNDER_PROFILE_PATH.read_text())
+    identity = raw["identity"]
+    voice = raw["voice"]
+    content = raw["content"]
+    design = raw["design"]
+    return FounderProfile(
+        founder_name=identity["founder_name"],
+        organization=identity["organization"],
+        intro=identity["intro"],
+        age=identity["age"],
+        stable_years=identity["stable_years"],
+        lived_experience=raw["lived_experience"],
+        expertise=raw["expertise"],
+        worldview=raw["worldview"],
+        references=raw["references"],
+        voice_traits=voice["core_traits"],
+        trust_builders=voice["trust_builders"],
+        avoid=voice["avoid"],
+        required_terms=voice["required_terms"],
+        blocked_terms=voice["blocked_terms"],
+        signature_angles=content["signature_angles"],
+        default_structure=content["default_structure"],
+        visual_direction=design["visual_direction"],
+        design_palette=design["palette"],
+        imagery_rules=design["imagery_rules"],
+    )

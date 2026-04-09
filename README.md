@@ -19,6 +19,19 @@ This project checks the latest YouTube uploads on the French and English channel
 
 The output is designed for speed and reliability first. It uses deterministic local generation so it still works without extra API keys.
 
+## Voice, founder, and design context
+
+The repository now includes a reusable HopeStage content system:
+
+- `VOICE_PROFILE.md` for plain-language voice guidance
+- `CONTENT_SYSTEM.md` for content strategy and usage
+- `DESIGN_GUIDELINES.md` for the working visual direction
+- `config/founder_profile.json` for machine-readable founder and brand context
+- `prompts/post_creation_prompt.md` for future prompting and drafting
+
+The generator reads `config/founder_profile.json` so new drafts can reflect Clement's lived experience, expertise, and HopeStage's positioning more consistently.
+The design layer is now aligned with the official Notion brand page: [HopeStage Brand Guidelines (EN)](https://www.notion.so/hopestage/HopeStage-Brand-Guidelines-EN-24239dda6d2880ed93d4e25c0675564d).
+
 ## Channels
 
 - French: `https://www.youtube.com/@HopeStage-FR/videos`

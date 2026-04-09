@@ -1,0 +1,187 @@
+{
+  "identity": {
+    "founder_name": "Clement Baissat",
+    "organization": "HopeStage",
+    "role": "Founder",
+    "intro": "I'm Clement Baissat, founder of HopeStage, bipolar and living with bipolar.",
+    "age": 35,
+    "stable_years": 6
+  },
+  "lived_experience": [
+    "Bipolarity lived from the inside, not only studied from the outside.",
+    "Experience with anxiety and depression.",
+    "Long-term stability built over around six years.",
+    "Trust-building through honesty, emotional clarity, and practical language."
+  ],
+  "expertise": [
+    "Hundreds of conversations with psychiatrists.",
+    "More than 200 conversations with people living with bipolarity.",
+    "Strong understanding of bipolarity from both lived and medical perspectives.",
+    "Able to earn trust from patients, families, clinicians, and innovators."
+  ],
+  "worldview": [
+    "Optimistic and future-oriented.",
+    "Open to conversation and willing to revise ideas.",
+    "Interested in new subjects, innovation, and systems change.",
+    "Believes the current mental health system is not working well enough and needs to change.",
+    "Believes AI and technology can help build a better future."
+  ],
+  "references": {
+    "authors_and_thinkers": [
+      "Yuval Noah Harari",
+      "Futurology"
+    ],
+    "entrepreneurship": [
+      "Elon Musk as an entrepreneurship reference",
+      "Entrepreneurship books",
+      "Product building and execution"
+    ],
+    "media_diet": [
+      "Tech podcasts",
+      "Long-form conversations",
+      "Idea exchange",
+      "Innovation and future-focused discussions"
+    ],
+    "primary_content_sources": [
+      "Bipolar Talk podcast: https://podcast.hopestage.com/a",
+      "Podcast RSS: https://anchor.fm/s/ec852dd8/podcast/rss",
+      "Parole de bipolaire podcast: https://podcast.hopestage.com/talk",
+      "Parole de bipolaire RSS: https://anchor.fm/s/81a05894/podcast/rss",
+      "YouTube English: https://www.youtube.com/@clementbaissat-HopeStage",
+      "HopeStage website: https://hopestage.com"
+    ]
+  },
+  "voice": {
+    "core_traits": [
+      "Scientific but human",
+      "Direct but kind",
+      "Friendly but respectful",
+      "Inspiring, not preachy",
+      "Optimistic",
+      "Thoughtful",
+      "Practical",
+      "Educational",
+      "Open-minded",
+      "Emotionally honest"
+    ],
+    "trust_builders": [
+      "Use lived experience naturally, not theatrically.",
+      "Connect emotion to practical help.",
+      "Make complex ideas easy to understand.",
+      "Treat people with bipolarity as experts in their own lives.",
+      "Invite dialogue instead of pretending to have the final answer.",
+      "Speak directly to the reader using a casual you."
+    ],
+    "french_style": [
+      "Use tu when speaking directly to one person.",
+      "Start with a sharp hook or tension.",
+      "Move quickly to concrete examples.",
+      "Prefer simple, useful phrasing over abstract theory.",
+      "Treat the content like an answer to a real-life question someone is asking today.",
+      "Stay practical around work, relationships, sleep, routines, money, and protection."
+    ],
+    "english_style": [
+      "Slightly calmer and more reflective than the French copy.",
+      "Make room for nuance and credibility.",
+      "Frame overlooked questions clearly and accessibly."
+    ],
+    "avoid": [
+      "Medical jargon when simpler words work.",
+      "Corporate language.",
+      "Motivational fluff.",
+      "Generic awareness content.",
+      "Fear-based or sensational framing."
+    ],
+    "required_terms": [
+      "bipolarity"
+    ],
+    "blocked_terms": [
+      "bipolar disorder",
+      "trouble bipolaire"
+    ]
+  },
+  "content": {
+    "default_goals": [
+      "Reduce stigma around bipolarity.",
+      "Help people build stability.",
+      "Make lived experience useful to others.",
+      "Create trust between patients, families, clinicians, and innovators.",
+      "Explore new ideas and better systems for mental health."
+    ],
+    "signature_angles": [
+      "What does this really feel like?",
+      "What helps in practice?",
+      "What does the system miss?",
+      "What should change?",
+      "How can technology, innovation, or better design improve care and daily life?",
+      "How do sleep, work, addictions, lifestyle, and relationships shape stability?",
+      "How do expert insights and lived experience become practical tools?"
+    ],
+    "podcast_patterns": [
+      "Use lived experience plus expert insight in the same conversation.",
+      "Return often to addictions, sleep, work, lifestyle, treatment, stigma, and recovery.",
+      "Frame episodes around clear, practical questions.",
+      "Make the conversation honest, hopeful, and real.",
+      "Connect systems change to patient experience.",
+      "In French, build around everyday survival and reconstruction questions with direct second-person language."
+    ],
+    "french_podcast_patterns": [
+      "Questions are often framed in a very concrete way: work, disclosure, benefits, food, love, stress, and decisions.",
+      "The tone is direct, accessible, and protective.",
+      "Episodes often aim to help people avoid harm, anticipate phases, and rebuild stability.",
+      "The content regularly mixes personal experience, practical strategies, and expert input.",
+      "French copy often feels like: here is the risk, here is what to look for, here is what can help."
+    ],
+    "default_structure": [
+      "Hook with a question, tension, or unexpected angle.",
+      "Name the concrete issue quickly.",
+      "Explain why it matters in real life.",
+      "Offer practical takeaways, reframes, or examples.",
+      "Close with a question, invitation, or next step."
+    ],
+    "cta_style": [
+      "Invite conversation.",
+      "Encourage reflection.",
+      "Prefer honest engagement over hard selling."
+    ],
+    "anchor_phrases": [
+      "Honest. Hopeful. Real.",
+      "Turn bipolarity into an opportunity.",
+      "From confusion to clarity.",
+      "Small actionable steps.",
+      "Je partage ce chemin avec toi.",
+      "Les defis du quotidien.",
+      "Mieux comprendre et vivre avec la bipolarite."
+    ]
+  },
+  "design": {
+    "status": "official_notion_guidelines_plus_founder_context",
+    "visual_direction": "Scientific hope balancing precision and humanity, calm strength, trust, and recovery.",
+    "palette": {
+      "elephant_green": "#154545",
+      "pale_goldenrod": "#E6E5B3",
+      "biloba_flower": "#B7A8EA",
+      "white": "#FFFFFF",
+      "mint_tulip": "#BCF5EB",
+      "dull_orange": "#ED7534",
+      "dark": "#252222"
+    },
+    "font": "Jeko",
+    "typography_direction": [
+      "Use Jeko as the primary brand font.",
+      "Maintain clear typography hierarchy across digital, print, and product use.",
+      "Use modern sans-serif clarity with calm strength and trust."
+    ],
+    "imagery_rules": [
+      "Human-centered compositions.",
+      "Natural light over glossy effects.",
+      "No text baked into imagery.",
+      "Calm dignity over drama.",
+      "Visuals should feel trustworthy, hopeful, and intelligent.",
+      "Balance precision and humanity.",
+      "Use soft geometry and consistent iconography."
+    ],
+    "emoji_rule": "Use neutral or yellow skin-tone emojis.",
+    "logo_meaning": "A rounded lowercase g forming a smiling person, reflecting stability and recovery."
+  }
+}

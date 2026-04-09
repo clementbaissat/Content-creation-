@@ -4,21 +4,22 @@ import re
 from collections import defaultdict
 from typing import List
 
-from .config import ChannelConfig
+from .config import ChannelConfig, FounderProfile, load_founder_profile
 from .models import GeneratedAssets, GuestProfile, VideoDetails
 from .utils import compact_whitespace, timestamp_label
 
 
 def build_assets(channel: ChannelConfig, details: VideoDetails) -> GeneratedAssets:
+    profile = load_founder_profile()
     guest = infer_guest(details)
     transcript_text = build_transcript_text(details)
     summary_text = build_summary(details, transcript_text)
     theme = detect_theme(details, summary_text)
-    hook_bank = build_hook_bank(channel.language, details, summary_text, theme)
-    linkedin_post = build_linkedin_post(channel.language, details, summary_text, hook_bank[0], theme)
+    hook_bank = build_hook_bank(channel.language, details, summary_text, theme, profile)
+    linkedin_post = build_linkedin_post(channel.language, details, summary_text, hook_bank[0], theme, profile)
     x_post = build_x_post(channel.language, details, summary_text, hook_bank[0], theme)
     instagram_post = build_instagram_post(channel.language, details, summary_text, hook_bank[0], theme)
-    image_prompt, image_specs = build_image_brief(channel.language, details, summary_text, theme)
+    image_prompt, image_specs = build_image_brief(channel.language, details, summary_text, theme, profile)
     thank_you_subject, thank_you_email = build_thank_you_email(channel.language, details, guest)
     notes = build_notes(details, guest)
     return GeneratedAssets(
@@ -75,7 +76,13 @@ def build_summary(details: VideoDetails, transcript_text: str) -> str:
     return " ".join(sentences[:3])
 
 
-def build_hook_bank(language: str, details: VideoDetails, summary_text: str, theme: str) -> List[str]:
+def build_hook_bank(
+    language: str,
+    details: VideoDetails,
+    summary_text: str,
+    theme: str,
+    profile: FounderProfile,
+) -> List[str]:
     primary = first_meaningful_sentence(summary_text)
     if theme == "decision":
         if language == "fr":
@@ -111,30 +118,40 @@ def build_hook_bank(language: str, details: VideoDetails, summary_text: str, the
         ]
     if language == "fr":
         return [
-            "Il y a des sujets qu'on devrait entendre plus tôt, plus clairement, et avec plus d'humanité.",
-            "Cette vidéo met des mots simples sur une expérience que beaucoup vivent sans réussir à l'expliquer.",
-            "Quand on parle de bipolarité avec précision, on crée déjà un peu plus de stabilité.",
+            "On n'a pas besoin de plus de bruit. On a besoin de plus de clarte utile.",
+            "Quand on parle depuis le vecu, un sujet complexe peut redevenir concret.",
+            "Parler de bipolarite avec precision, c'est deja proteger un peu plus de stabilite.",
             primary,
-            "Ce sujet mérite plus qu'un slogan. Il mérite une vraie conversation.",
+            f"Chez {profile.organization}, ce sujet merite plus qu'un slogan. Il merite une vraie conversation.",
         ]
     return [
-        "Some topics need less noise and more clarity.",
-        "This episode puts simple language around an experience many people live without knowing how to describe.",
-        "Talking about bipolarity with precision creates a little more stability and a lot less stigma.",
+        "Some topics need less noise and more useful clarity.",
+        "When you start from lived experience, a complex subject becomes easier to name and discuss.",
+        "Talking about bipolarity with precision can protect stability and reduce stigma at the same time.",
         primary,
-        "This subject deserves more than a slogan. It deserves a real conversation.",
+        f"At {profile.organization}, this subject deserves more than a slogan. It deserves a real conversation.",
     ]
 
 
-def build_linkedin_post(language: str, details: VideoDetails, summary_text: str, hook: str, theme: str) -> str:
+def build_linkedin_post(
+    language: str,
+    details: VideoDetails,
+    summary_text: str,
+    hook: str,
+    theme: str,
+    profile: FounderProfile,
+) -> str:
     notes = minute_notes(details)
     summary_sentence = normalize_terms(summary_text)
     bullets, closing_question = linkedin_scaffold(language, theme)
+    credibility_line = founder_credibility_line(language, profile)
     if language == "fr":
         body = [
             hook,
             "",
             f"Dans cette nouvelle vidéo HopeStage, on parle d'un sujet central : {summary_sentence}",
+            "",
+            credibility_line,
             "",
             notes[0] if notes else fallback_note(language, theme),
             "",
@@ -150,6 +167,8 @@ def build_linkedin_post(language: str, details: VideoDetails, summary_text: str,
         hook,
         "",
         f"In this week's HopeStage video, we focus on a core question: {summary_sentence}",
+        "",
+        credibility_line,
         "",
         notes[0] if notes else fallback_note(language, theme),
         "",
@@ -238,33 +257,41 @@ def build_instagram_post(language: str, details: VideoDetails, summary_text: str
     return "\n".join(lines)
 
 
-def build_image_brief(language: str, details: VideoDetails, summary_text: str, theme: str) -> tuple[str, List[str]]:
+def build_image_brief(
+    language: str,
+    details: VideoDetails,
+    summary_text: str,
+    theme: str,
+    profile: FounderProfile,
+) -> tuple[str, List[str]]:
+    palette = palette_summary(profile)
+    direction = profile.visual_direction.lower()
     if theme == "decision":
         if language == "fr":
             prompt = (
                 "Portrait éditorial minimaliste d'une personne devant deux chemins, tension intérieure calme, "
-                "lumière douce, palette beige et bleu grisé, ambiance HopeStage, sans texte, composition avec zone sûre centrale."
+                f"lumiere douce, palette {palette}, ambiance HopeStage, {direction}, sans texte, composition avec zone sure centrale."
             )
         else:
             prompt = (
                 "Minimal editorial portrait of a person facing two paths, calm inner tension, soft light, "
-                "beige and muted blue palette, HopeStage tone, no text, centered safe area for social crops."
+                f"palette {palette}, HopeStage tone, {direction}, no text, centered safe area for social crops."
             )
     elif theme == "aging":
         if language == "fr":
             prompt = (
                 "Portrait éditorial chaleureux d'une personne plus âgée dans une lumière naturelle, "
-                "ambiance stable et digne, palette sable, bleu doux et vert grisé, sans texte, style magazine santé mentale."
+                f"ambiance stable et digne, palette {palette}, {direction}, sans texte, style magazine sante mentale."
             )
         else:
             prompt = (
                 "Warm editorial portrait of an older adult in natural light, stable and dignified mood, "
-                "sand, soft blue and muted green palette, no text, mental-health magazine style."
+                f"palette {palette}, {direction}, no text, mental-health magazine style."
             )
     else:
         prompt = (
-            "Editorial social image with calm natural light, human-centered composition, soft HopeStage palette, "
-            "no text, strong central safe area for multiple social crops."
+            "Editorial social image with calm natural light, human-centered composition, "
+            f"palette {palette}, {direction}, no text, strong central safe area for multiple social crops."
         )
     specs = [
         "Primary format: 4:5 portrait, 1080x1350, for Instagram and LinkedIn feed.",
@@ -358,6 +385,32 @@ def minute_notes(details: VideoDetails) -> List[str]:
             continue
         notes.append(f"[{minute:02d}:00] {text[:220].rstrip()}...")
     return notes
+
+
+def founder_credibility_line(language: str, profile: FounderProfile) -> str:
+    if language == "fr":
+        return (
+            f"J'aborde ce sujet avec un double regard : le vecu, environ {profile.stable_years} ans de stabilite, "
+            "et des centaines d'echanges avec psychiatres et personnes concernees."
+        )
+    return (
+        f"I approach this through both lived experience and pattern recognition: around {profile.stable_years} years of "
+        "stability, hundreds of conversations with psychiatrists, and many discussions with people living with bipolarity."
+    )
+
+
+def palette_summary(profile: FounderProfile) -> str:
+    preferred_order = [
+        "elephant_green",
+        "pale_goldenrod",
+        "biloba_flower",
+        "mint_tulip",
+        "dull_orange",
+        "dark",
+        "white",
+    ]
+    color_names = [name.replace("_", " ") for name in preferred_order if name in profile.design_palette]
+    return ", ".join(color_names)
 
 
 def split_sentences(text: str) -> List[str]:
