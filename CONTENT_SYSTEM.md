@@ -21,6 +21,11 @@ The voice and topic layer is also grounded in the public podcast source:
 - [Parole de bipolaire podcast hub](https://podcast.hopestage.com/talk)
 - [Parole de bipolaire RSS feed](https://anchor.fm/s/81a05894/podcast/rss)
 
+Official YouTube sources for latest-video requests:
+
+- French: [@HopeStage-FR](https://www.youtube.com/@HopeStage-FR)
+- English: [@clementbaissat-HopeStage](https://www.youtube.com/@clementbaissat-HopeStage)
+
 ## What This System Should Optimize For
 
 The job is not to produce generic mental health content.

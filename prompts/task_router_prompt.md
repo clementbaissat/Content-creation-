@@ -10,6 +10,7 @@ Translate a plain-language request into a concrete HopeStage content workflow.
 
 - latest interview
 - latest video
+- latest YouTube video
 - podcast episode URL
 - video URL
 - transcript
@@ -29,11 +30,14 @@ Translate a plain-language request into a concrete HopeStage content workflow.
 ## Routing Rules
 
 1. Determine the source first.
-2. If the source is a public video or podcast, inspect it directly.
-3. If the source is a voice note or transcript, identify the main idea before writing.
-4. If language is not specified, use the source language.
-5. If the user asks for visual output, prepare thumbnail or image guidance too.
-6. Keep everything aligned with:
+2. If the request mentions the latest YouTube video and no direct URL is given, use:
+   - French: `https://www.youtube.com/@HopeStage-FR`
+   - English: `https://www.youtube.com/@clementbaissat-HopeStage`
+3. If the source is a public video or podcast, inspect it directly.
+4. If the source is a voice note or transcript, identify the main idea before writing.
+5. If language is not specified, use the source language.
+6. If the user asks for visual output, prepare thumbnail or image guidance too.
+7. Keep everything aligned with:
    - `VOICE_PROFILE.md`
    - `CONTENT_SYSTEM.md`
    - `DESIGN_GUIDELINES.md`

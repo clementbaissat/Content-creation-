@@ -59,7 +59,21 @@ def detect_source_kind(lower: str, source_url: Optional[str]) -> str:
         return "url"
     if contains_any(lower, ["voice recording", "voice note", "audio note", "vocal", "memo vocal"]):
         return "voice_note"
-    if contains_any(lower, ["latest interview", "latest video", "latest episode", "derniere interview", "dernière interview"]):
+    if contains_any(
+        lower,
+        [
+            "latest interview",
+            "latest video",
+            "latest youtube video",
+            "latest episode",
+            "derniere interview",
+            "dernière interview",
+            "derniere video youtube",
+            "dernière vidéo youtube",
+            "derniere video",
+            "dernière vidéo",
+        ],
+    ):
         return "latest_content"
     if contains_any(lower, ["interview", "podcast", "video", "episode"]):
         return "content_reference"
@@ -131,6 +145,8 @@ def build_notes(source_kind: str, language: str, outputs: List[str], source_url:
     notes: List[str] = []
     if language == "source_default":
         notes.append("If language is not specified, default to the source language.")
+    if source_kind == "latest_content":
+        notes.append("For latest YouTube requests, use the official HopeStage French and English channels unless a direct URL is provided.")
     if source_kind == "voice_note":
         notes.append("Voice notes should be turned into a clarified content angle before drafting.")
     if "linkedin_post" in outputs:

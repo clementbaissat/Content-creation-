@@ -10,6 +10,8 @@ You should be able to ask things like:
 
 - `Prepare me a LinkedIn post for the latest interview I did in English.`
 - `Fais-moi un post LinkedIn en français pour ma dernière interview, avec la miniature.`
+- `Prepare me a LinkedIn post for the latest YouTube video in English.`
+- `Fais-moi un post LinkedIn pour la dernière vidéo YouTube en français.`
 - `Use this video and prepare an Instagram post plus thumbnail: <url>`
 - `I recorded a voice note with an idea. Turn it into a LinkedIn post.`
 - `Take this transcript and create a post for LinkedIn and Instagram.`
@@ -18,11 +20,19 @@ You should be able to ask things like:
 
 - latest interview
 - latest video
+- latest YouTube video
 - podcast episode URL
 - YouTube or video URL
 - transcript
 - voice recording or voice note
 - rough text idea
+
+## Official YouTube Sources
+
+When a request mentions the `latest YouTube video` and no direct URL is provided, use these official channels:
+
+- French: `https://www.youtube.com/@HopeStage-FR`
+- English: `https://www.youtube.com/@clementbaissat-HopeStage`
 
 ## Supported Outputs
 
@@ -38,6 +48,7 @@ You should be able to ask things like:
 
 - If language is not specified, default to the source language.
 - If the request mentions the latest interview or latest video, fetch the newest relevant source first.
+- If the request mentions the latest YouTube video, use the official HopeStage YouTube channels unless the user gives a direct URL.
 - If the request is based on a voice note, extract the core idea before drafting.
 - If the request asks for a thumbnail or image, also prepare a visual direction or image prompt.
 - Keep all outputs aligned with HopeStage voice and brand guidance.
@@ -67,6 +78,10 @@ You should be able to ask things like:
 ### French
 
 `Prépare-moi un post LinkedIn pour ma dernière interview en français, avec une miniature.`
+
+### Latest YouTube
+
+`Prepare me a LinkedIn post for the latest YouTube video in English and give me the thumbnail.`
 
 ### Voice Note
 
