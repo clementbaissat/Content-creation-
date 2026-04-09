@@ -27,3 +27,9 @@ This file stores reusable lessons from Clement's review feedback so the content 
 
 - When feedback mentions a visual mismatch, check the actual rendered output instead of trusting the intended format.
 - If a social format has platform-specific behavior, encode it in the generator and the documentation.
+
+### Hashtags
+
+- Social post deliverables should always include hashtags.
+- Generate platform-appropriate hashtag sets for LinkedIn, X, and Instagram instead of leaving them implicit.
+- Keep hashtags aligned with HopeStage terminology, especially `bipolarité` / `bipolarity`, and avoid blocked wording.

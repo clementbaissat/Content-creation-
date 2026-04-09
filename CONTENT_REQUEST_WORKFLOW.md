@@ -37,8 +37,11 @@ When a request mentions the `latest YouTube video` and no direct URL is provided
 ## Supported Outputs
 
 - LinkedIn post
+- LinkedIn hashtags
 - Instagram post
+- Instagram hashtags
 - X post
+- X hashtags
 - blog article
 - newsletter draft
 - thumbnail direction
@@ -53,6 +56,7 @@ When a request mentions the `latest YouTube video` and no direct URL is provided
 - If the request asks for a thumbnail or image, also prepare a visual direction or image prompt.
 - Keep all outputs aligned with HopeStage voice and brand guidance.
 - If the request is for an Instagram carousel, default to square `1080x1080` slides unless another format is explicitly requested.
+- Social post deliverables should include hashtags by default.
 - Unless stated otherwise, assume the audience is people living with bipolarity.
 - For podcast and YouTube content, optimize first for views, comments, and full-video watching.
 - Use an expert founder angle by default, not only personal testimony.

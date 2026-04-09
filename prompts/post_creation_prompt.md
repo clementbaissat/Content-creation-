@@ -54,3 +54,4 @@ Create a HopeStage post that sounds like Clement Baissat.
 - No stigmatizing wording
 - For Instagram carousels, think in square slides first.
 - If branded visuals are involved, use the canonical files under `assets/brand/`.
+- Include hashtags by default for LinkedIn, X, and Instagram.

@@ -36,8 +36,11 @@ def write_output_bundle(channel: ChannelConfig, details: VideoDetails, assets: G
     (output_dir / "summary.txt").write_text(assets.summary_text + "\n")
     (output_dir / "hooks.txt").write_text("\n\n".join(assets.hook_bank) + "\n")
     (output_dir / "linkedin_post.txt").write_text(assets.linkedin_post + "\n")
+    (output_dir / "linkedin_hashtags.txt").write_text(" ".join(assets.linkedin_hashtags) + "\n")
     (output_dir / "x_post.txt").write_text(assets.x_post + "\n")
+    (output_dir / "x_hashtags.txt").write_text(" ".join(assets.x_hashtags) + "\n")
     (output_dir / "instagram_post.txt").write_text(assets.instagram_post + "\n")
+    (output_dir / "instagram_hashtags.txt").write_text(" ".join(assets.instagram_hashtags) + "\n")
     (output_dir / "image_prompt.txt").write_text(assets.image_prompt + "\n")
     (output_dir / "image_specs.txt").write_text("\n".join(assets.image_specs) + "\n")
     (output_dir / "thank_you_email.txt").write_text(
@@ -67,11 +70,20 @@ def build_bundle(channel: ChannelConfig, details: VideoDetails, assets: Generate
             "LINKEDIN POST",
             assets.linkedin_post,
             "",
+            "LINKEDIN HASHTAGS",
+            " ".join(assets.linkedin_hashtags),
+            "",
             "X POST",
             assets.x_post,
             "",
+            "X HASHTAGS",
+            " ".join(assets.x_hashtags),
+            "",
             "INSTAGRAM POST",
             assets.instagram_post,
+            "",
+            "INSTAGRAM HASHTAGS",
+            " ".join(assets.instagram_hashtags),
             "",
             "IMAGE PROMPT",
             assets.image_prompt,

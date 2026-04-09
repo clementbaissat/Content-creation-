@@ -46,6 +46,11 @@ class GeneratorImageSpecTests(unittest.TestCase):
             "If branded graphics are used, source logos only from assets/brand/HopeStage logo home.png or assets/brand/Frame 10.png.",
             assets.image_specs,
         )
+        self.assertIn("#bipolarite", assets.linkedin_hashtags)
+        self.assertIn("#aah", assets.linkedin_hashtags)
+        self.assertIn("#hopestage", assets.x_hashtags)
+        self.assertIn("#psychoeducation", assets.instagram_hashtags)
+        self.assertIn("#bipolarite", assets.instagram_post)
 
 
 if __name__ == "__main__":

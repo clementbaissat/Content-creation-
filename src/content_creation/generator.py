@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from collections import defaultdict
 from typing import List
 
@@ -17,9 +18,12 @@ def build_assets(channel: ChannelConfig, details: VideoDetails) -> GeneratedAsse
     summary_text = build_summary(details, transcript_text)
     theme = detect_theme(details, summary_text)
     hook_bank = build_hook_bank(channel.language, details, summary_text, theme, profile)
-    linkedin_post = build_linkedin_post(channel.language, details, summary_text, hook_bank[0], theme, profile)
-    x_post = build_x_post(channel.language, details, summary_text, hook_bank[0], theme)
-    instagram_post = build_instagram_post(channel.language, details, summary_text, hook_bank[0], theme)
+    linkedin_hashtags, x_hashtags, instagram_hashtags = build_platform_hashtags(channel.language, details, theme)
+    linkedin_post = build_linkedin_post(
+        channel.language, details, summary_text, hook_bank[0], theme, profile, linkedin_hashtags
+    )
+    x_post = build_x_post(channel.language, details, summary_text, hook_bank[0], theme, x_hashtags)
+    instagram_post = build_instagram_post(channel.language, details, summary_text, hook_bank[0], theme, instagram_hashtags)
     image_prompt, image_specs = build_image_brief(channel.language, details, summary_text, theme, profile)
     thank_you_subject, thank_you_email = build_thank_you_email(channel.language, details, guest)
     notes = build_notes(details, guest)
@@ -27,8 +31,11 @@ def build_assets(channel: ChannelConfig, details: VideoDetails) -> GeneratedAsse
         summary_text=summary_text,
         hook_bank=hook_bank,
         linkedin_post=linkedin_post,
+        linkedin_hashtags=linkedin_hashtags,
         x_post=x_post,
+        x_hashtags=x_hashtags,
         instagram_post=instagram_post,
+        instagram_hashtags=instagram_hashtags,
         image_prompt=image_prompt,
         image_specs=image_specs,
         thank_you_subject=thank_you_subject,
@@ -141,6 +148,7 @@ def build_linkedin_post(
     hook: str,
     theme: str,
     profile: FounderProfile,
+    hashtags: List[str],
 ) -> str:
     notes = minute_notes(details)
     summary_sentence = normalize_terms(summary_text)
@@ -162,6 +170,8 @@ def build_linkedin_post(
             closing_question,
             "",
             f"Vidéo : {details.summary.url}",
+            "",
+            " ".join(hashtags),
         ]
         return "\n".join(body)
     body = [
@@ -179,46 +189,62 @@ def build_linkedin_post(
         closing_question,
         "",
         f"Video: {details.summary.url}",
+        "",
+        " ".join(hashtags),
     ]
     return "\n".join(body)
 
 
-def build_x_post(language: str, details: VideoDetails, summary_text: str, hook: str, theme: str) -> str:
+def build_x_post(
+    language: str,
+    details: VideoDetails,
+    summary_text: str,
+    hook: str,
+    theme: str,
+    hashtags: List[str],
+) -> str:
     if theme == "decision":
         if language == "fr":
             candidate = (
                 "Tu te sens ultra clair ? C'est parfois le pire moment pour prendre une grande décision. "
                 "En bipolarité, une nuit de sommeil et un regard extérieur peuvent t'éviter une erreur très chère. "
-                f"{details.summary.url}"
+                f"{details.summary.url} {' '.join(hashtags)}"
             )
         else:
             candidate = (
                 "Feeling unusually certain can be the worst moment to make a big decision. "
                 "With bipolarity, one night of sleep and outside perspective can prevent a very expensive mistake. "
-                f"{details.summary.url}"
+                f"{details.summary.url} {' '.join(hashtags)}"
             )
     elif theme == "aging":
         if language == "fr":
             candidate = (
                 "On parle beaucoup du diagnostic. Beaucoup moins de ce que devient la bipolarité avec l'âge. "
                 "Sommeil, routine, soutien, autonomie: la conversation doit évoluer. "
-                f"{details.summary.url}"
+                f"{details.summary.url} {' '.join(hashtags)}"
             )
         else:
             candidate = (
                 "We talk a lot about diagnosis. Much less about what bipolarity looks like with age. "
                 "Sleep, routine, support, autonomy: the conversation needs to evolve. "
-                f"{details.summary.url}"
+                f"{details.summary.url} {' '.join(hashtags)}"
             )
     else:
         if language == "fr":
-            candidate = f"{hook} {details.summary.url}"
+            candidate = f"{hook} {details.summary.url} {' '.join(hashtags)}"
         else:
-            candidate = f"{hook} {details.summary.url}"
+            candidate = f"{hook} {details.summary.url} {' '.join(hashtags)}"
     return trim_to_limit(candidate, 280)
 
 
-def build_instagram_post(language: str, details: VideoDetails, summary_text: str, hook: str, theme: str) -> str:
+def build_instagram_post(
+    language: str,
+    details: VideoDetails,
+    summary_text: str,
+    hook: str,
+    theme: str,
+    hashtags: List[str],
+) -> str:
     if theme == "decision":
         if language == "fr":
             lines = [
@@ -255,7 +281,76 @@ def build_instagram_post(language: str, details: VideoDetails, summary_text: str
             ]
     else:
         lines = [hook, "", first_meaningful_sentence(summary_text)]
+    lines.extend(["", " ".join(hashtags)])
     return "\n".join(lines)
+
+
+def build_platform_hashtags(
+    language: str,
+    details: VideoDetails,
+    theme: str,
+) -> tuple[List[str], List[str], List[str]]:
+    base = base_hashtags(language)
+    topic = topic_hashtags(language, details, theme)
+    linkedin = dedupe_hashtags(base["linkedin"] + topic[:3])
+    x = dedupe_hashtags(base["x"] + topic[:2])
+    instagram = dedupe_hashtags(base["instagram"] + topic[:5])
+    return linkedin, x, instagram
+
+
+def base_hashtags(language: str) -> dict[str, List[str]]:
+    if language == "fr":
+        return {
+            "linkedin": ["#bipolarite", "#santementale", "#hopestage", "#psychoeducation"],
+            "x": ["#bipolarite", "#santementale", "#hopestage"],
+            "instagram": ["#bipolarite", "#santementale", "#hopestage", "#psychoeducation", "#stabilite"],
+        }
+    return {
+        "linkedin": ["#bipolarity", "#mentalhealth", "#hopestage", "#psychoeducation"],
+        "x": ["#bipolarity", "#mentalhealth", "#hopestage"],
+        "instagram": ["#bipolarity", "#mentalhealth", "#hopestage", "#psychoeducation", "#stability"],
+    }
+
+
+def topic_hashtags(language: str, details: VideoDetails, theme: str) -> List[str]:
+    haystack = strip_accents(" ".join([details.summary.title, details.description]).lower())
+    tags: List[str] = []
+    if theme == "decision":
+        tags.extend(["#priseDeDecision", "#prevention"] if language == "fr" else ["#decisionmaking", "#prevention"])
+    if theme == "aging":
+        tags.extend(["#vieillissement", "#soutien"] if language == "fr" else ["#aging", "#support"])
+    keyword_map = [
+        ("aah", "#aah"),
+        ("work", "#work"),
+        ("travail", "#travail"),
+        ("sleep", "#sleep"),
+        ("sommeil", "#sommeil"),
+        ("addiction", "#addiction"),
+        ("pregnan", "#grossesse" if language == "fr" else "#pregnancy"),
+        ("postpartum", "#postpartum"),
+        ("genetic", "#genetique" if language == "fr" else "#genetics"),
+        ("genet", "#genetique" if language == "fr" else "#genetics"),
+        ("children", "#parents" if language == "fr" else "#parenting"),
+        ("enfant", "#parents"),
+    ]
+    for needle, tag in keyword_map:
+        if needle in haystack:
+            tags.append(tag)
+    return dedupe_hashtags(tags)
+
+
+def dedupe_hashtags(tags: List[str]) -> List[str]:
+    seen = set()
+    deduped: List[str] = []
+    for tag in tags:
+        normalized = tag.lower()
+        if not normalized.startswith("#"):
+            continue
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        deduped.append(tag)
+    return deduped
 
 
 def build_image_brief(
@@ -511,6 +606,11 @@ def normalize_terms(text: str) -> str:
     normalized = normalized.replace("Bipolar disorder", "Bipolarity")
     normalized = normalized.replace("trouble bipolaire", "bipolarité")
     return normalized
+
+
+def strip_accents(text: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", text)
+    return "".join(char for char in decomposed if not unicodedata.combining(char))
 
 
 def trim_to_limit(text: str, limit: int) -> str:

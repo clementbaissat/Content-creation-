@@ -113,8 +113,11 @@ Each folder contains:
 - `summary.txt`
 - `hooks.txt`
 - `linkedin_post.txt`
+- `linkedin_hashtags.txt`
 - `x_post.txt`
+- `x_hashtags.txt`
 - `instagram_post.txt`
+- `instagram_hashtags.txt`
 - `image_prompt.txt`
 - `image_specs.txt`
 - `thank_you_email.txt`
@@ -160,6 +163,7 @@ Current reusable learnings include:
 - use canonical HopeStage logos from `assets/brand/`, not older desktop exports
 - default Instagram carousel slides to `1:1` square, not generic `4:5`
 - keep brand and CTA elements inside a generous square safe zone
+- always generate platform-specific hashtags with the posts
 
 ## Thumbnail system
 
