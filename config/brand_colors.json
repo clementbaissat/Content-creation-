@@ -1,0 +1,33 @@
+{
+  "brand": "HopeStage",
+  "palette": [
+    {
+      "name": "Elephant Green",
+      "hex": "#154545"
+    },
+    {
+      "name": "Pale Goldenrod",
+      "hex": "#E6E5B3"
+    },
+    {
+      "name": "Biloba Flower",
+      "hex": "#B7A8EA"
+    },
+    {
+      "name": "White",
+      "hex": "#FFFFFF"
+    },
+    {
+      "name": "Mint Tulip",
+      "hex": "#BCF5EB"
+    },
+    {
+      "name": "Dull Orange",
+      "hex": "#ED7534"
+    },
+    {
+      "name": "Dark",
+      "hex": "#252222"
+    }
+  ]
+}
